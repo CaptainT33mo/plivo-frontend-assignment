@@ -210,21 +210,15 @@ export default function ContactsPage() {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-2">
                 <DialogClose asChild>
-                  <button
-                    type="button"
-                    className="mr-2 px-4 py-2 border rounded"
-                  >
+                  <Button type="button" variant="destructive">
                     Cancel
-                  </button>
+                  </Button>
                 </DialogClose>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded"
-                >
+                <Button variant="default" type="submit">
                   {editingCustomer ? "Update" : "Create"}
-                </button>
+                </Button>
               </div>
             </form>
           </DialogContent>
