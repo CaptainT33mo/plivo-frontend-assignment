@@ -30,7 +30,12 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredConversations = useMemo(() => {
-    let result = conversations.filter((conversation) => {
+    console.log("Conversations:", conversations); // Debugging line
+    if (!Array.isArray(conversations)) {
+      console.error("conversations is not an array:", conversations);
+      return [];
+    }
+    let result = conversations?.filter((conversation) => {
       const matchesSearch = conversation.subject
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -104,6 +109,7 @@ export default function Home() {
             onChange={(value) => setSortOption(value)}
             placeholder="Sort by"
             className="w-40 h-8 bg-white"
+            data-testid="sort-select"
           />
         </div>
       </div>
