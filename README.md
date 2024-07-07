@@ -1,3 +1,7 @@
+# Plivo Frontend Assignment by Vibhor Sharma
+
+I bootstrapped this application using create next app for NextJS application. I used Radix UI for UI components and Zustand for global state management which uses persistent storage and stores data in browser's local storage.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
