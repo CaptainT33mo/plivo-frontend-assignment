@@ -50,6 +50,7 @@ export default function ContactsPage() {
 
   const handleEdit = (customer: Customer) => {
     setEditingCustomer(customer);
+    // @ts-ignore
     setFormData(customer);
     setIsAddModalOpen(true);
   };
@@ -129,13 +130,13 @@ export default function ContactsPage() {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">Contacts</h1>
+        <h1 className="text-base font-bold mb-4">Contacts</h1>
         <Button onClick={() => setIsAddModalOpen(true)}>
           <FaPlus className="inline mr-2" /> Add Contact
         </Button>
       </div>
 
-      <div className="bg-white rounded-lg">
+      <div className="rounded-lg">
         <DataTable columns={columns} data={customers} searchColumnKey="name" />
       </div>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FaPlus } from "react-icons/fa";
 import { v4 as uuidV4 } from "uuid";
 import { useStore } from "@/store";
@@ -13,6 +13,9 @@ import {
   DialogTrigger,
 } from "@/components/UI/Dialog";
 import { Button } from "@/components/UI/Button";
+import SelectComponent from "@/components/UI/Select/SelectComponent";
+import { PRIORITY_OPTIONS, STATUS_OPTIONS } from "@/utils/constants";
+import { Label } from "@/components/UI/Label";
 
 export default function NewConversationDialog() {
   const [customerName, setCustomerName] = useState("");
@@ -105,6 +108,24 @@ export default function NewConversationDialog() {
             New Conversation
           </DialogTitle>
           <form onSubmit={handleSubmit}>
+            <div className="flex justify-between gap-3 mb-4">
+              <div>
+                <Label>Status</Label>
+                <SelectComponent
+                  options={STATUS_OPTIONS}
+                  defaultValue={status}
+                  onChange={(val) => setStatus(val as Status)}
+                />
+              </div>
+              <div>
+                <Label>Priority</Label>
+                <SelectComponent
+                  options={PRIORITY_OPTIONS}
+                  defaultValue={priority}
+                  onChange={(val) => setPriority(val as Priority)}
+                />
+              </div>
+            </div>
             <div className="mb-4">
               <label
                 className="block text-sm font-medium mb-1"
@@ -187,55 +208,13 @@ export default function NewConversationDialog() {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label
-                className="block text-sm font-medium mb-1"
-                htmlFor="status"
-              >
-                Status
-              </label>
-              <select
-                id="status"
-                className="w-full p-2 border rounded"
-                value={status}
-                onChange={(e) => setStatus(e.target.value as Status)}
-              >
-                <option value="open">Open</option>
-                <option value="pending">Pending</option>
-                <option value="closed">Closed</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-sm font-medium mb-1"
-                htmlFor="priority"
-              >
-                Priority
-              </label>
-              <select
-                id="priority"
-                className="w-full p-2 border rounded"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value as Priority)}
-              >
-                <option value="low">Low</option>
-                <option value="normal">Normal</option>
-                <option value="high">High</option>
-                <option value="urgent">Urgent</option>
-              </select>
-            </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
               <DialogClose asChild>
-                <button type="button" className="mr-2 px-4 py-2 border rounded">
+                <Button type="button" variant="secondary">
                   Cancel
-                </button>
+                </Button>
               </DialogClose>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                Create
-              </button>
+              <Button type="submit">Create</Button>
             </div>
           </form>
         </DialogContent>

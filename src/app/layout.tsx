@@ -30,7 +30,7 @@ export default function RootLayout({
         <div className="flex w-full h-full min-h-full overflow-hidden items-stretch">
           <Sidebar />
           <div className="flex flex-col flex-1 min-w-0">
-            <main className="flex flex-col flex-auto relative overflow-auto place-items-stretch border rounded-md mr-2 my-2">
+            <main className="flex flex-col flex-auto relative overflow-auto place-items-stretch border rounded-md mr-2 my-2 bg-gray-50">
               {children}
             </main>
           </div>

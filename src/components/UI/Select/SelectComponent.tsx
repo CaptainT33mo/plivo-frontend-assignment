@@ -13,16 +13,18 @@ type SelectComponentProps = {
   placeholder?: string;
   className?: string;
   onChange?: (value: string) => void;
+  defaultValue?: string | undefined;
 };
 
 const SelectComponent: React.FC<SelectComponentProps> = ({
   options,
   placeholder = "Select an option",
   className = "w-[180px]",
+  defaultValue,
   onChange,
 }) => {
   return (
-    <Select onValueChange={onChange}>
+    <Select onValueChange={onChange} defaultValue={defaultValue}>
       <SelectTrigger className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

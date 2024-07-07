@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { FaReply, FaArchive, FaTrash, FaTag } from "react-icons/fa";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useStore } from "@/store";
-import { Sender } from "../../../../types";
+import { Sender, Status } from "../../../../types";
 import { Button } from "@/components/UI/Button";
+import SelectComponent from "@/components/UI/Select/SelectComponent";
+import { STATUS_OPTIONS } from "@/utils/constants";
+import { LuTrash2 } from "react-icons/lu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/UI/Avatar";
+import { getInitialsFromName } from "@/utils/helpers";
 
 export default function ConversationView() {
   const params = useParams();
@@ -38,70 +41,65 @@ export default function ConversationView() {
     }
   };
 
-  return (
-    <div className=" p-4">
-      <div className="bg-white shadow rounded-lg">
-        {/* Conversation Header */}
-        <div className="border-b p-4">
-          <h1 className="text-2xl font-bold">{conversation.customer.name}</h1>
-          <p className="text-gray-500">{conversation.customer.email}</p>
-        </div>
+  const handleStatusChange = (val: string) => {
+    updateConversation(id, {
+      status: val as Status,
+      lastUpdated: new Date(),
+    });
+  };
 
-        {/* Action Toolbar */}
-        <div className="border-b p-2 flex space-x-2">
-          <Button className="p-2 hover:bg-gray-100 rounded">
-            <FaReply />
-          </Button>
-          <Button className="p-2 hover:bg-gray-100 rounded">
-            <FaArchive />
-          </Button>
-          <Button className="p-2 hover:bg-gray-100 rounded">
-            <FaTrash />
-          </Button>
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-              <Button className="p-2 hover:bg-gray-100 rounded">
-                <FaTag />
-              </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Portal>
-              <DropdownMenu.Content className="bg-white shadow-lg rounded-md p-2">
-                <DropdownMenu.Item className="p-2 hover:bg-gray-100 cursor-pointer">
-                  Urgent
-                </DropdownMenu.Item>
-                <DropdownMenu.Item className="p-2 hover:bg-gray-100 cursor-pointer">
-                  Follow-up
-                </DropdownMenu.Item>
-                <DropdownMenu.Item className="p-2 hover:bg-gray-100 cursor-pointer">
-                  Resolved
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-          </DropdownMenu.Root>
+  return (
+    <div className="p-4 max-w-6xl mx-auto w-full">
+      <div>
+        {/* Conversation Header */}
+        <div className="flex px-2 justify-between gap-3 mb-4">
+          <h2 className="text-2xl truncate">{conversation.subject}</h2>
+          <div className="flex gap-2">
+            <SelectComponent
+              className="w-32 bg-white"
+              options={STATUS_OPTIONS}
+              defaultValue={conversation.status}
+              onChange={handleStatusChange}
+            />
+            <Button variant="outline" className="bg-white">
+              <LuTrash2 size={18} />
+            </Button>
+          </div>
         </div>
 
         {/* Message Thread */}
         <div className="p-4 space-y-4">
           {conversation.messages.map((message, index) => (
-            <div key={message.id} className="border-b pb-4 last:border-b-0">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <span className="font-semibold">
-                    {message.sender === Sender.CUSTOMER
-                      ? conversation.customer.name
-                      : "Support"}
-                  </span>
-                  <span className="text-gray-500 ml-2 text-sm">
+            <div key={message.id} className="border-b pb-5 last:border-b-0">
+              <div className="flex items-start gap-2 mb-5">
+                <Avatar>
+                  {message.sender === Sender.CUSTOMER && (
+                    <AvatarImage src={"https://picsum.photos/200"} />
+                  )}
+                  <AvatarFallback>
+                    {getInitialsFromName(conversation.customer.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex justify-between w-full">
+                  <div>
+                    <p className="font-semibold">
+                      {message.sender === Sender.CUSTOMER
+                        ? conversation.customer.name
+                        : "Support"}
+                    </p>
+                    <p className="text-gray-500 text-xs">
+                      {message.sender === Sender.CUSTOMER
+                        ? conversation.customer.email
+                        : "support@example.com"}
+                    </p>
+                  </div>
+                  <div className="text-gray-500 text-sm">
                     {new Date(message.timestamp).toLocaleString()}
-                  </span>
+                  </div>
                 </div>
-                {index === 0 && (
-                  <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                    {conversation.status}
-                  </span>
-                )}
               </div>
-              <div className="text-gray-700 whitespace-pre-wrap">
+
+              <div className="text-gray-700 whitespace-pre-wrap pl-12">
                 {message.content}
               </div>
             </div>
